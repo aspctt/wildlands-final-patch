@@ -1,0 +1,67 @@
+###############################################################################
+# Wildlands Final Patch - .gitignore for a Java / NeoForge Minecraft mod
+###############################################################################
+
+## Gradle build output
+build/
+.gradle/
+gradletasknamecache
+gradle-app.setting
+
+# gradle/wrapper/gradle-wrapper.jar is intentionally TRACKED. It is what lets a
+# fresh clone run ./gradlew without Gradle installed, so never add a blanket
+# *.jar rule here.
+
+## IDE / editor cruft
+.idea/
+.vscode/
+.vs/
+out/
+*.iml
+*.ipr
+*.iws
+.settings/
+.metadata/
+.classpath
+.project
+bin/
+eclipse/
+*.launch
+
+## OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Development runtime
+# Produced by launching the game: worlds, logs, crash reports, options, and the
+# pack mods installDevMods copies in. A world save in particular would be both
+# large and meaningless to anyone else.
+run/
+runs/
+run-data/
+
+## Mixin diagnostics, written by -Dmixin.debug.export=true
+.mixin.out/
+
+## Crash artefacts, wherever they land
+crash-reports/
+*.hprof
+hs_err_pid*.log
+
+###############################################################################
+# Local-only reference material. NOT for publication.
+#
+# These hold third-party mod binaries, decompiled or checked-out sources, and
+# player-submitted logs. The binaries are what the development client loads and
+# what fixes are compiled against; they are other people's work under other
+# people's licences, several of which forbid redistribution. This mod is All
+# Rights Reserved and ships none of them.
+#
+# The bug reports are worse to publish by accident than the mods are: crash
+# reports and logs carry usernames, file paths, and sometimes server addresses.
+#
+# Remove an entry only if you deliberately intend to publish it. See NOTICE.
+###############################################################################
+external-files/
+NOTES.md

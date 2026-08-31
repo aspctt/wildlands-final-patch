@@ -1,0 +1,47 @@
+WILDLANDS FINAL PATCH LICENSE
+
+Copyright (c) 2026 ASPCT. All rights reserved.
+
+This license covers the Wildlands Final Patch mod: its source code, compiled
+binaries, and the assets distributed with it (the "Software").
+
+
+1. RESERVED RIGHTS
+
+   No permission is given to copy, modify, merge, publish, distribute,
+   sublicense, sell, decompile, disassemble, or otherwise reverse-engineer the
+   Software, or to create derivative works of it, in whole or in part, except
+   as expressly stated below.
+
+   You may download and use the Software for personal play, as part of the
+   Wildlands modpack.
+
+
+2. DISTRIBUTION
+
+   The Software exists to fix the mods in the Wildlands modpack and is
+   published only as a component of that pack, by the copyright holder.
+
+   You may not redistribute it, whether on its own, inside another modpack, or
+   inside a modified copy of Wildlands, and you may not re-host, mirror,
+   repackage, or alter the JAR.
+
+   Running the Software on a server for your own group, from the pack as it was
+   published, is fine and requires no further permission.
+
+
+3. THIRD-PARTY MODS
+
+   The Software patches mods written by other people. It contains none of their
+   code and redistributes none of their files, and it does not alter their
+   licensing in any way. See the NOTICE file distributed with the Software.
+
+
+4. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE
+   USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -1,0 +1,10 @@
+{
+  "wildlands_patch.configuration.title": "Wildlands Final Patch",
+  "wildlands_patch.configuration.section.wildlands_patch.common.toml": "Wildlands Final Patch",
+  "wildlands_patch.configuration.section.wildlands_patch.common.toml.title": "Wildlands Final Patch",
+
+  "wildlands_patch.configuration.general": "General",
+  "wildlands_patch.configuration.logAppliedFixes": "Log Applied Fixes",
+
+  "wildlands_patch.configuration.fixes": "Fixes"
+}

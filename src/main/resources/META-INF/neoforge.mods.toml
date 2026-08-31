@@ -1,0 +1,56 @@
+# Mod metadata for the Wildlands Final Patch.
+# Placeholders are expanded from gradle.properties by the ProcessResources task in build.gradle.
+
+modLoader="javafml" #mandatory
+loaderVersion="${loader_version_range}" #mandatory
+license="${mod_license}"
+
+[[mods]] #mandatory
+modId="${mod_id}" #mandatory
+version="${mod_version}" #mandatory
+displayName="${mod_name}" #mandatory
+authors="${mod_authors}"
+#logoFile="${mod_id}.png" #optional
+description='''
+Compatibility and bug fix patches for the Wildlands modpack.
+
+Ships no content of its own. Everything here is a fix for a bug or an interaction between the
+mods the pack contains, and every fix can be switched off individually in the config.
+
+Built for this pack and distributed with it. It is not meant to be installed on its own.
+'''
+
+# Mixin config, loaded by FML. The file lives at the root of the JAR.
+[[mixins]]
+config="${mod_id}.mixins.json"
+
+# Uncomment alongside the accessTransformers line in build.gradle.
+#[[accessTransformers]]
+#file="META-INF/accesstransformer.cfg"
+
+[[dependencies.${mod_id}]] #optional
+    modId="neoforge" #mandatory
+    type="required" #mandatory
+    versionRange="[${neo_version},)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# Mods this patch fixes are declared here as they are patched, so a fix is never a hard
+# requirement and the JAR stays loadable when the pack drops a mod:
+#
+#[[dependencies.${mod_id}]]
+#    modId="some_mod"
+#    type="optional"
+#    # 'AFTER' makes this mod load after the one it patches, which matters for event handler
+#    # ordering and for anything that reads the other mod's registries at startup.
+#    ordering="AFTER"
+#    side="BOTH"
+#    versionRange="[1.2.3,)"
+#    reason="Fixes duplicated drops when broken by another mod."
