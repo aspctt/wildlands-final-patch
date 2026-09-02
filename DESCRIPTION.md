@@ -19,7 +19,7 @@ Where an event or a public API can do the job, it is used. Mixins are kept for t
 
 ### Requirements
 
-Minecraft 1.21.1 and NeoForge 21.1.235 or newer. Individual fixes require the mods they patch, and do nothing when those mods are absent.
+Minecraft 1.21.1 and NeoForge 21.1.249 or newer. Individual fixes require the mods they patch, and do nothing when those mods are absent.
 
 This mod is built for Wildlands and ships with it. It is not meant to be installed on its own, and it will not do anything useful in another pack.
 

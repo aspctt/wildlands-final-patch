@@ -24,17 +24,19 @@ The config is written to `config/wildlands_patch-common.toml` on first launch, a
 ## Requirements
 
 * Minecraft 1.21.1
-* NeoForge 21.1.235 or newer
+* NeoForge 21.1.249 or newer
 
 Individual fixes require the mods they patch, and are inert when those mods are absent.
 
 ## Repository layout
 
 ```
-src/main/java/com/aspct/wildlandspatch/
+src/main/java/com/aspctt/wildlandspatch/
     WildlandsFinalPatch.java        mod entry point
     WildlandsFinalPatchClient.java  client entry point, client only fixes
     Config.java                     config, and the registry of fix toggles
+    Mods.java                       mod ids, and the loaded check every fix is guarded by
+    client/sodium/                  options pages rebuilt on Sodium's config API
     mixin/                          mixins, one class per target
 src/main/resources/
     META-INF/neoforge.mods.toml     mod metadata and dependency declarations
@@ -46,6 +48,10 @@ external-files/                     local only, never published, see .gitignore
     other-mods/                     third-party sources kept for reference
 ```
 
+## What it currently fixes
+
+**Sodium 0.8 options pages.** Sodium 0.6 let a mod add its settings to the video settings screen by mixing into `SodiumGameOptionPages`. Sodium 0.8 deleted that class and replaced it with a config API. Mods that have not been updated still carry the old mixin, which now fails to apply, and the failure is quiet: the settings simply stop appearing, with nothing in the log beyond a mixin target warning. Better Biome Reblend and Cubes Without Borders are both in that state in this pack, which left the biome blend radius and the borderless fullscreen mode with no in game control at all. Both are re-registered here through the supported API, as pages under this mod's own entry in the video settings screen: Sodium allows registering on another mod's behalf, but two registrations under one mod id crash the game at startup, which is what would happen the day one of these mods ships its own Sodium 0.8 integration.
+
 ## Adding a fix
 
 1. Declare a toggle in `Config` with `fix(key, comment, default)` and keep the returned key on the class that implements the fix. Write the comment for a player reading the config file: what breaks without it, and which mods are involved.
@@ -56,13 +62,18 @@ external-files/                     local only, never published, see .gitignore
 
 ## Development
 
-Put the pack's JARs in `external-files/dev-mods/`, then:
+Put the pack's JARs in `external-files/dev-mods/`, or point `dev_mods_dir` at the live instance, then:
 
 ```
 ./gradlew installDevMods
 ```
 
-That mirrors them into `run/client/mods`, which is where the development client loads them from. It is a mirror rather than a copy, so a JAR removed from the source folder is removed from the run folder too and an updated mod cannot leave its old version behind. `./gradlew runClient` does this automatically. Run configurations launched from an IDE bypass Gradle, so run the task yourself after changing the folder.
+That mirrors them into `run/client/mods`, which is where the development client loads them from. To run against the pack as it is actually installed, set the source once in `~/.gradle/gradle.properties` rather than in the repository:
+
+```
+dev_mods_dir=C:/Users/<you>/AppData/Roaming/PrismLauncher/instances/Wildlands/minecraft/mods
+```
+ It is a mirror rather than a copy, so a JAR removed from the source folder is removed from the run folder too and an updated mod cannot leave its old version behind. `./gradlew runClient` does this automatically. Run configurations launched from an IDE bypass Gradle, so run the task yourself after changing the folder.
 
 To compile against another mod, add its repository and a `compileOnly` dependency in `build.gradle`. Cursemaven and the Modrinth Maven both serve pack JARs directly and are listed there, commented out.
 

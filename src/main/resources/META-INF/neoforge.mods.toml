@@ -42,15 +42,30 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-# Mods this patch fixes are declared here as they are patched, so a fix is never a hard
-# requirement and the JAR stays loadable when the pack drops a mod:
-#
-#[[dependencies.${mod_id}]]
-#    modId="some_mod"
-#    type="optional"
-#    # 'AFTER' makes this mod load after the one it patches, which matters for event handler
-#    # ordering and for anything that reads the other mod's registries at startup.
-#    ordering="AFTER"
-#    side="BOTH"
-#    versionRange="[1.2.3,)"
-#    reason="Fixes duplicated drops when broken by another mod."
+# Mods this patch fixes. All optional, so a fix is never a hard requirement and the JAR stays
+# loadable when the pack drops a mod. 'AFTER' makes this mod load after the one it patches, which
+# matters for event handler ordering and for anything reading the other mod's registries at startup.
+
+[[dependencies.${mod_id}]]
+    modId="sodium"
+    type="optional"
+    ordering="AFTER"
+    side="CLIENT"
+    versionRange="[0.8,)"
+    reason="Re-registers options pages that mods lost when Sodium 0.8 replaced its GUI."
+
+[[dependencies.${mod_id}]]
+    modId="betterbiomereblend"
+    type="optional"
+    ordering="AFTER"
+    side="CLIENT"
+    versionRange="[1.5.2,)"
+    reason="Its blend radius is missing from Sodium's video settings."
+
+[[dependencies.${mod_id}]]
+    modId="cubes_without_borders"
+    type="optional"
+    ordering="AFTER"
+    side="CLIENT"
+    versionRange="[3.0.0,)"
+    reason="Its fullscreen mode is missing from Sodium's video settings."

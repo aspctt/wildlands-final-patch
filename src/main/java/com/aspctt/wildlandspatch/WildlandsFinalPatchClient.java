@@ -1,4 +1,4 @@
-package com.aspct.wildlandspatch;
+package com.aspctt.wildlandspatch;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;

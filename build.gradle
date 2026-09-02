@@ -7,7 +7,9 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = mod_version
+// The Minecraft version is part of the version, not just the file name, so the mods list and a
+// JAR sitting in someone's mods folder both say which game version it was built for.
+version = "${mod_version}+${minecraft_version}"
 group = mod_group_id
 
 sourceSets.main.resources {
@@ -20,15 +22,26 @@ sourceSets.main.resources {
 }
 
 repositories {
-    // Maven repositories for the mods this patch compiles against go here, as they are needed.
-    // Common ones:
-    // maven { url = 'https://maven.blamejared.com' }          // JEI, CraftTweaker
-    // maven { url = 'https://cursemaven.com' }                // any CurseForge file by project/file id
-    // maven { url = 'https://api.modrinth.com/maven' }        // any Modrinth version
+    maven {
+        name = 'CaffeineMC'
+        url = 'https://maven.caffeinemc.net/releases'
+        content { includeGroup 'net.caffeinemc' }
+    }
+
+    // Serves any Modrinth version as maven.modrinth:<project slug>:<version number or version id>.
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+
+    // Add as needed:
+    // maven { url = 'https://maven.blamejared.com' }   // JEI, CraftTweaker
+    // maven { url = 'https://cursemaven.com' }         // any CurseForge file by project/file id
 }
 
 base {
-    archivesName = mod_id
+    archivesName = mod_archives_name
 }
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
@@ -80,28 +93,27 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    // Mods this patch mixes into or compiles against.
-    //
-    // A mixin only needs the target class at compile time, so 'compileOnly' is usually right:
-    // the patched mod is present in the pack anyway and must not become a hard requirement here.
-    // Guard every such fix behind a mod-loaded check so the JAR stays safe when the mod is absent.
-    //
-    // From a Maven repository declared above:
-    // compileOnly "some.group:some-mod:${some_mod_version}"
-    //
-    // From a jar dropped in external-files/dev-mods, which is also what the development client loads:
+    // Mods this patch compiles against. All 'compileOnly': the mod is in the pack anyway and must
+    // not become a hard requirement here, so every fix touching one is guarded by a mod-loaded
+    // check and the JAR stays loadable when the mod is gone.
+    compileOnly "net.caffeinemc:sodium-neoforge-api:${sodium_api_version}"
+    compileOnly "maven.modrinth:bbrb:${better_biome_reblend_version}"
+    compileOnly "maven.modrinth:cubes-without-borders:${cubes_without_borders_version}"
+
+    // A mod with no Maven anywhere can be taken straight from the dev mods folder instead:
     // compileOnly files("external-files/dev-mods/some-mod-1.21.1-1.2.3.jar")
 }
 
-// Mirrors the modpack JARs kept in external-files/dev-mods into the development client's mods
-// folder, so fixes run against the mods they are meant to fix. It is a Sync, not a Copy: jars
-// removed from the source folder are removed from the run folder too, which is what stops a
-// stale duplicate of an updated mod from being loaded alongside the new one.
+// Mirrors the pack's JARs into the development client's mods folder, so fixes run against the
+// mods they are meant to fix. The source is external-files/dev-mods unless dev_mods_dir says
+// otherwise, which is how the live Prism instance is used instead. It is a Sync, not a Copy:
+// jars removed from the source are removed from the run folder too, which is what stops a stale
+// duplicate of an updated mod from being loaded alongside the new one.
 tasks.register('installDevMods', Sync) {
     group = 'wildlands'
-    description = 'Copies the mod JARs in external-files/dev-mods into run/client/mods.'
+    description = 'Copies the pack mod JARs into run/client/mods. Source: -Pdev_mods_dir, default external-files/dev-mods.'
 
-    from(layout.projectDirectory.dir('external-files/dev-mods')) {
+    from(providers.gradleProperty('dev_mods_dir').getOrElse('external-files/dev-mods')) {
         include '**/*.jar'
     }
     into(layout.projectDirectory.dir('run/client/mods'))
@@ -125,7 +137,8 @@ tasks.withType(ProcessResources).configureEach {
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
-            mod_version            : mod_version,
+            // The full version, so what the mods list shows matches the file name.
+            mod_version            : version,
             mod_authors            : mod_authors,
     ]
     inputs.properties replaceProperties

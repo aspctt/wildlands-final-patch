@@ -1,4 +1,4 @@
-package com.aspct.wildlandspatch;
+package com.aspctt.wildlandspatch;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -33,14 +33,21 @@ public final class Config {
             .define("general.logAppliedFixes", true);
 
     // ---------------------------------------------------------------------------------------
-    // Fix toggles. One line per fix, added as fixes land, for example:
-    //
-    //   public static final String SOME_MOD_DUPED_DROPS =
-    //           fix("someModDupedDrops", "Stops <mod> dropping its block twice when broken by <other mod>.", true);
-    //
-    // Keep the comment aimed at a player reading the config file: what breaks without the fix,
-    // and which mods are involved.
+    // Fix toggles. One line per fix. Keep the comment aimed at a player reading the config file:
+    // what breaks without the fix, and which mods are involved.
     // ---------------------------------------------------------------------------------------
+
+    public static final String SODIUM_OPTIONS_BETTER_BIOME_REBLEND = fix("sodiumOptionsBetterBiomeReblend", true,
+            "Puts Better Biome Reblend's blend radius back in Sodium's video settings.",
+            "Its own integration targets a class Sodium removed in 0.8, so without this the setting is",
+            "missing from that screen and the blend radius cannot be changed in game.",
+            "Takes effect on restart.");
+
+    public static final String SODIUM_OPTIONS_CUBES_WITHOUT_BORDERS = fix("sodiumOptionsCubesWithoutBorders", true,
+            "Puts Cubes Without Borders' fullscreen mode back in Sodium's video settings, as a three way",
+            "choice of off, fullscreen, or borderless. Its own integration targets the same class Sodium",
+            "removed in 0.8.",
+            "Takes effect on restart.");
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
@@ -65,11 +72,11 @@ public final class Config {
      * Declares a fix toggle and returns its key.
      *
      * @param key          config key, camelCase, unique across fixes
-     * @param comment      what the fix does, written for whoever is reading the config file
      * @param defaultValue whether the fix is on out of the box
+     * @param comment      what the fix does, written for whoever is reading the config file, one
+     *                     argument per line
      */
-    @SuppressWarnings("unused") // Called from this class's field initialisers as fixes are added.
-    private static String fix(String key, String comment, boolean defaultValue) {
+    private static String fix(String key, boolean defaultValue, String... comment) {
         TOGGLES.put(key, BUILDER.comment(comment).define("fixes." + key, defaultValue));
         DEFAULTS.put(key, defaultValue);
         return key;

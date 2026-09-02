@@ -1,4 +1,4 @@
-package com.aspct.wildlandspatch;
+package com.aspctt.wildlandspatch;
 
 import com.mojang.logging.LogUtils;
 
