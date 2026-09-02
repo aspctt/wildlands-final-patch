@@ -4,6 +4,8 @@
 * Unreleased: 1.0.0
 
 	+ **Fixes**
+		* Serene Seasons no longer crashes a single player world a few seconds after it loads. Its precipitation hook, added in 10.1.0.7, intercepts `Biome.hasPrecipitation` and then falls back to asking the biome that same question, so for any biome not tagged tropical it calls itself until the stack runs out
+		* The fallback reads the biome's own precipitation flag directly instead. NeoForge routes that through the same biome modifiers the hook would have seen, so the answer is unchanged
 		* Create Deco's placard recipe loads again. It is written with `id` rather than `item` for an ingredient, which Minecraft only accepts from 1.21.2, so on 1.21.1 the recipe was dropped and the placard could not be crafted
 		* Dungeons and Taverns' quest trader advancement loads again. It named `minecraft:root` as its parent, which is not an advancement in 1.21, so it never loaded and the trade it grants never happened
 		* Its companion `wander_add_map` is deliberately left broken: the reward function it calls, `nova_structures:choose_wander`, is not in the mod at all, so loading the advancement would trade one error at startup for one on every interaction with a wandering trader
@@ -28,6 +30,7 @@
 		* Fix toggles exposed through the Config button on the Mods screen
 
 	+ **Project**
+		* Serene Seasons and the other patched mods pinned by Modrinth version id where a version number is published for more than one loader
 		* NeoForge 21.1.249 on Minecraft 1.21.1, matching the version the pack ships, Java 21, Parchment mappings
 		* Compiles against Sodium's separately published API artifact, so the config API is available without unpacking Sodium's nested JAR
 		* Better Biome Reblend pinned by Modrinth version id, since two different files are published as 1.5.2 and only one carries the neoforge class tree

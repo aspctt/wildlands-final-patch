@@ -61,6 +61,12 @@ public final class Config {
             "from 1.21.2 and so never loads here, and Dungeons and Taverns' quest trader advancement, which",
             "names a parent that does not exist and so never loads either, leaving the trade ungranted.");
 
+    public static final String SERENE_SEASONS_PRECIPITATION_RECURSION = fix("sereneSeasonsPrecipitationRecursion", true,
+            "Stops Serene Seasons crashing a single player world a few seconds after it loads.",
+            "Its precipitation hook falls back to asking the biome the same question the hook intercepts, so for",
+            "any biome not tagged tropical it calls itself until the stack runs out. Added in 10.1.0.7.",
+            "Turning this off restores the crash.");
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     /**

@@ -99,6 +99,7 @@ dependencies {
     compileOnly "net.caffeinemc:sodium-neoforge-api:${sodium_api_version}"
     compileOnly "maven.modrinth:bbrb:${better_biome_reblend_version}"
     compileOnly "maven.modrinth:cubes-without-borders:${cubes_without_borders_version}"
+    compileOnly "maven.modrinth:serene-seasons:${serene_seasons_version}"
 
     // A mod with no Maven anywhere can be taken straight from the dev mods folder instead:
     // compileOnly files("external-files/dev-mods/some-mod-1.21.1-1.2.3.jar")

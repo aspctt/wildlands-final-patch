@@ -9,6 +9,7 @@
   "wildlands_patch.configuration.fixes": "Fixes",
   "wildlands_patch.configuration.brokenDataOverrides": "Broken Data Overrides",
   "wildlands_patch.configuration.duplicateEmptyLootTable": "Duplicate Empty Loot Table Crash",
+  "wildlands_patch.configuration.sereneSeasonsPrecipitationRecursion": "Serene Seasons Precipitation Recursion",
   "wildlands_patch.configuration.sodiumOptionsBetterBiomeReblend": "Better Biome Reblend Options In Sodium",
   "wildlands_patch.configuration.sodiumOptionsCubesWithoutBorders": "Cubes Without Borders Options In Sodium",
 

@@ -16,6 +16,8 @@ public final class Mods {
 
     public static final String CUBES_WITHOUT_BORDERS = "cubes_without_borders";
 
+    public static final String SERENE_SEASONS = "sereneseasons";
+
     private Mods() {
     }
 
