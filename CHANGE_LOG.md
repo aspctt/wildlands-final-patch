@@ -4,6 +4,11 @@
 * Unreleased: 1.0.0
 
 	+ **Fixes**
+		* Create Deco's placard recipe loads again. It is written with `id` rather than `item` for an ingredient, which Minecraft only accepts from 1.21.2, so on 1.21.1 the recipe was dropped and the placard could not be crafted
+		* Dungeons and Taverns' quest trader advancement loads again. It named `minecraft:root` as its parent, which is not an advancement in 1.21, so it never loaded and the trade it grants never happened
+		* Its companion `wander_add_map` is deliberately left broken: the reward function it calls, `nova_structures:choose_wander`, is not in the mod at all, so loading the advancement would trade one error at startup for one on every interaction with a wandering trader
+		* World creation no longer dies on a datapack that ships its own `minecraft:empty` loot table. Minecraft registers its own copy after the datapacks have loaded without checking first, so the second one is a duplicate key in a registry, and the game crashes on the click that opens the world creation screen rather than reporting a bad file
+		* The datapack's copy is kept, which is what happened before 1.21 turned loot tables into a registry, and is why packs written for older versions carry the file at all
 		* Better Biome Reblend's blend radius restored to Sodium's video settings, up to 29x29, with the label its own lang file provides
 		* Cubes Without Borders' fullscreen mode restored to Sodium's video settings, as the three way off, fullscreen, or borderless choice the mod adds
 		* Both were lost when Sodium 0.8 deleted `SodiumGameOptionPages`, which their own integrations mix into. The mixin silently fails to apply and the settings simply stop appearing, so both are rebuilt on Sodium's config API instead
@@ -13,6 +18,9 @@
 		* Both pages registered under this mod rather than on each mod's behalf. Sodium allows the latter, but two registrations under one mod id are a startup crash, which is what would happen the day one of these mods ships its own Sodium 0.8 integration alongside this patch
 
 	+ **Framework**
+		* Data overrides: a datapack shipped inside the JAR and forced above every other mod's data, for the fixes that are a single wrong JSON file in someone else's mod
+		* Registered at `Pack.Position.TOP` rather than relying on file precedence inside the merged mod data, which is not defined between mods
+		* Marked always active, so it cannot be switched off in a world's datapack list where doing so would look like a repair rather than a break. The config toggle is the way off
 		* Per-fix config toggles, so one fix can be disabled without taking the rest of them out with it
 		* Toggles readable before the config file loads, falling back to their declared defaults, since mixins run against classes loaded long before config loading happens
 		* Toggles read inside the handler rather than around the registration, so switching one off takes effect on a config reload instead of only at startup

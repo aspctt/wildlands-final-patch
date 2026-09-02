@@ -7,8 +7,12 @@
   "wildlands_patch.configuration.logAppliedFixes": "Log Applied Fixes",
 
   "wildlands_patch.configuration.fixes": "Fixes",
+  "wildlands_patch.configuration.brokenDataOverrides": "Broken Data Overrides",
+  "wildlands_patch.configuration.duplicateEmptyLootTable": "Duplicate Empty Loot Table Crash",
   "wildlands_patch.configuration.sodiumOptionsBetterBiomeReblend": "Better Biome Reblend Options In Sodium",
   "wildlands_patch.configuration.sodiumOptionsCubesWithoutBorders": "Cubes Without Borders Options In Sodium",
+
+  "wildlands_patch.pack.data_overrides": "Wildlands Final Patch data overrides",
 
   "wildlands_patch.sodium.page.better_biome_reblend": "Better Biome Reblend",
   "wildlands_patch.sodium.page.cubes_without_borders": "Cubes Without Borders"

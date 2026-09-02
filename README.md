@@ -37,10 +37,12 @@ src/main/java/com/aspctt/wildlandspatch/
     Config.java                     config, and the registry of fix toggles
     Mods.java                       mod ids, and the loaded check every fix is guarded by
     client/sodium/                  options pages rebuilt on Sodium's config API
+    data/DataOverrides.java         registers the data override pack
     mixin/                          mixins, one class per target
 src/main/resources/
     META-INF/neoforge.mods.toml     mod metadata and dependency declarations
     wildlands_patch.mixins.json     mixin config, every mixin class is listed here
+    data_overrides/                 datapack forced above other mods' data, see below
 external-files/                     local only, never published, see .gitignore
     bug-reports/                    crash reports and logs a fix is being written against
     context-files/                  notes and references for work in progress
@@ -50,7 +52,11 @@ external-files/                     local only, never published, see .gitignore
 
 ## What it currently fixes
 
+**Datapacks with their own `minecraft:empty` loot table.** Loot tables became a registry in 1.21, and Minecraft registers its own `minecraft:empty` into it after the datapacks have loaded, without checking whether one is already there. A datapack carrying `data/minecraft/loot_table/empty.json` is a duplicate key, and the game crashes on the click that opens world creation, pointing at the screen rather than at the file. Packs written for 1.20 and earlier carry that file because back then it simply replaced vanilla's. This keeps the datapack's copy, which is what used to happen.
+
 **Sodium 0.8 options pages.** Sodium 0.6 let a mod add its settings to the video settings screen by mixing into `SodiumGameOptionPages`. Sodium 0.8 deleted that class and replaced it with a config API. Mods that have not been updated still carry the old mixin, which now fails to apply, and the failure is quiet: the settings simply stop appearing, with nothing in the log beyond a mixin target warning. Better Biome Reblend and Cubes Without Borders are both in that state in this pack, which left the biome blend radius and the borderless fullscreen mode with no in game control at all. Both are re-registered here through the supported API, as pages under this mod's own entry in the video settings screen: Sodium allows registering on another mod's behalf, but two registrations under one mod id crash the game at startup, which is what would happen the day one of these mods ships its own Sodium 0.8 integration.
+
+**Broken JSON in other mods.** Create Deco's placard recipe uses `id` where 1.21.1 requires `item` for an ingredient, a syntax that only became valid in 1.21.2, so the recipe never loads and the placard cannot be crafted. Dungeons and Taverns' quest trader advancement names `minecraft:root` as its parent, which is not an advancement in 1.21, so it never loads and the trade it grants never happens. Both are replaced from a datapack shipped in this JAR, described below.
 
 ## Adding a fix
 
@@ -59,6 +65,8 @@ external-files/                     local only, never published, see .gitignore
 3. Guard anything mod-specific with a `ModList.get().isLoaded(...)` check.
 4. Declare the patched mod in `neoforge.mods.toml` as an `optional` dependency with `ordering="AFTER"`, so this mod loads after the one it corrects.
 5. Add an entry to [CHANGE_LOG.md](./CHANGE_LOG.md) naming the mods involved and the symptom, not the implementation. That entry is what makes the fix findable a year later when the mod updates and the fix has to be re-checked.
+
+When the fix is a broken JSON file rather than behaviour, it needs no code at all. Drop a corrected copy into `src/main/resources/data_overrides/`, at the same path it has in the mod it came from, and change only what is broken. That directory is a datapack registered above every other mod's data, so the copy there wins. Everything in it is someone else's file, so each one has to be re-checked when that mod updates: an override keeps applying long after upstream has fixed the file itself.
 
 ## Development
 

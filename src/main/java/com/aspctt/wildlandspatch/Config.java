@@ -49,6 +49,18 @@ public final class Config {
             "removed in 0.8.",
             "Takes effect on restart.");
 
+    public static final String DUPLICATE_EMPTY_LOOT_TABLE = fix("duplicateEmptyLootTable", true,
+            "Stops a datapack that ships its own minecraft:empty loot table from crashing world creation.",
+            "Minecraft registers its own copy after the datapacks have loaded and does not check first, so the",
+            "second one is a duplicate key and the game dies on the click that opens the world creation screen.",
+            "Datapacks written for 1.20 and earlier carry that file harmlessly, which is where they come from.");
+
+    public static final String BROKEN_DATA_OVERRIDES = fix("brokenDataOverrides", true,
+            "Replaces JSON files that other mods ship broken, from a datapack loaded above their own data.",
+            "Currently: Create Deco's placard recipe, which is written in a syntax Minecraft only accepted",
+            "from 1.21.2 and so never loads here, and Dungeons and Taverns' quest trader advancement, which",
+            "names a parent that does not exist and so never loads either, leaving the trade ungranted.");
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     /**

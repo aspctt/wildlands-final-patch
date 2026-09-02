@@ -3,7 +3,9 @@
   "minVersion": "0.8.5",
   "package": "com.aspctt.wildlandspatch.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "ReloadableServerRegistriesMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

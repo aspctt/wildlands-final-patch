@@ -1,5 +1,6 @@
 package com.aspctt.wildlandspatch;
 
+import com.aspctt.wildlandspatch.data.DataOverrides;
 import com.mojang.logging.LogUtils;
 
 import net.neoforged.bus.api.IEventBus;
@@ -25,6 +26,7 @@ public final class WildlandsFinalPatch {
 
     public WildlandsFinalPatch(IEventBus modEventBus, ModContainer modContainer) {
         Config.register(modEventBus, modContainer);
+        DataOverrides.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
     }
