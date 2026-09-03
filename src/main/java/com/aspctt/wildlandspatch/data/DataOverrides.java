@@ -1,5 +1,7 @@
 package com.aspctt.wildlandspatch.data;
 
+import java.util.List;
+
 import com.aspctt.wildlandspatch.Config;
 import com.aspctt.wildlandspatch.WildlandsFinalPatch;
 
@@ -12,7 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 /**
- * A datapack shipped inside this mod, forced above every other mod's data.
+ * Datapacks shipped inside this mod, forced above every other mod's data.
  *
  * <p>Plenty of what breaks in a pack is a JSON file in someone else's mod: a recipe written in the
  * syntax of a later Minecraft version, an advancement pointing at a parent that does not exist. The
@@ -21,18 +23,32 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
  * not something to rely on. Registering a separate pack at {@link Pack.Position#TOP} is, since it
  * is applied after the merged mod data and therefore replaces it.
  *
- * <p>The pack lives at {@code data_overrides/} in the JAR. To fix another file, drop it in at the
- * same path it has in the mod it comes from and change only what is broken. Every file in there is
- * a copy of someone else's, so each one has to be checked against the mod when that mod updates:
- * an override does not stop applying just because upstream fixed the file itself.
+ * <p>There are two, and the split is deliberate. {@code data_overrides/} holds corrections to files
+ * that are broken, and {@code data_balance/} holds changes to files that work exactly as their
+ * author intended and that this pack wants different anyway. They are separately switchable because
+ * they are separate decisions: someone disabling a balance choice should not quietly lose a crash
+ * fix with it, and someone turning the fixes off to test a bug should not find the pack's balance
+ * reverting underneath them.
  *
- * <p>The pack is marked always active, so it cannot be switched off in the datapack list of a
- * world, where turning it off would look like a way to fix something rather than to break it. The
- * config toggle is the way to disable it.
+ * <p>To change another mod's file, drop a copy into the right directory at the same path it has in
+ * the mod it came from, and change only what needs changing. Everything in both directories is
+ * someone else's file, so each one has to be re-checked when that mod updates: an override keeps
+ * applying long after upstream has moved on.
+ *
+ * <p>Both packs are marked always active, so neither can be switched off in the datapack list of a
+ * world, where turning one off would look like a way to fix something rather than to break it. The
+ * config toggles are the way to disable them.
  */
 public final class DataOverrides {
-    /** Directory inside the JAR holding the pack, resolved relative to the JAR root. */
-    private static final String PACK_DIRECTORY = "data_overrides";
+    /**
+     * A pack directory in the JAR, its config toggle, and the name it shows under. Directories are
+     * resolved relative to the JAR root.
+     */
+    private record BuiltInPack(String directory, String fixKey, String nameKey) {}
+
+    private static final List<BuiltInPack> PACKS = List.of(
+            new BuiltInPack("data_overrides", Config.BROKEN_DATA_OVERRIDES, "wildlands_patch.pack.data_overrides"),
+            new BuiltInPack("data_balance", Config.BALANCE_TWEAKS, "wildlands_patch.pack.data_balance"));
 
     private DataOverrides() {
     }
@@ -46,16 +62,18 @@ public final class DataOverrides {
             return;
         }
 
-        if (!Config.enabled(Config.BROKEN_DATA_OVERRIDES)) {
-            return;
-        }
+        for (BuiltInPack pack : PACKS) {
+            if (!Config.enabled(pack.fixKey())) {
+                continue;
+            }
 
-        event.addPackFinders(
-                ResourceLocation.fromNamespaceAndPath(WildlandsFinalPatch.MODID, PACK_DIRECTORY),
-                PackType.SERVER_DATA,
-                Component.translatable("wildlands_patch.pack.data_overrides"),
-                PackSource.BUILT_IN,
-                true,
-                Pack.Position.TOP);
+            event.addPackFinders(
+                    ResourceLocation.fromNamespaceAndPath(WildlandsFinalPatch.MODID, pack.directory()),
+                    PackType.SERVER_DATA,
+                    Component.translatable(pack.nameKey()),
+                    PackSource.BUILT_IN,
+                    true,
+                    Pack.Position.TOP);
+        }
     }
 }

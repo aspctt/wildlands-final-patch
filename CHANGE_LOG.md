@@ -19,7 +19,12 @@
 		* Each page built separately, so one of these mods moving a class in an update costs its own page rather than Sodium's whole video settings screen
 		* Both pages registered under this mod rather than on each mod's behalf. Sodium allows the latter, but two registrations under one mod id are a startup crash, which is what would happen the day one of these mods ships its own Sodium 0.8 integration alongside this patch
 
+	+ **Balance**
+		* Gasoline from Create Diesel Generators takes a liquid blaze burner to super heated rather than heated. Create Crafts & Additions decides the level from a `liquid_burning` recipe, so this is its own recipe with `superheated` set, not a code change
+		* Diesel, biodiesel, crude oil and the rest are left at heated, so gasoline is the one fluid worth refining for
+
 	+ **Framework**
+		* Balance changes ship as a second datapack, separate from the one correcting broken files, and separately switchable. Disabling a balance choice should not quietly take a crash fix with it, and turning the fixes off to test a bug should not revert the pack's balance underneath you
 		* Data overrides: a datapack shipped inside the JAR and forced above every other mod's data, for the fixes that are a single wrong JSON file in someone else's mod
 		* Registered at `Pack.Position.TOP` rather than relying on file precedence inside the merged mod data, which is not defined between mods
 		* Marked always active, so it cannot be switched off in a world's datapack list where doing so would look like a repair rather than a break. The config toggle is the way off

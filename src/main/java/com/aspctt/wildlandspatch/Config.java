@@ -67,6 +67,12 @@ public final class Config {
             "any biome not tagged tropical it calls itself until the stack runs out. Added in 10.1.0.7.",
             "Turning this off restores the crash.");
 
+    public static final String BALANCE_TWEAKS = fix("balanceTweaks", true,
+            "Changes to other mods' files that are not bugs, only choices this pack makes differently.",
+            "Currently: gasoline from Create Diesel Generators takes a liquid blaze burner to super heated",
+            "rather than heated, which is what its refining chain costs are worth here. Diesel, biodiesel and",
+            "the rest are left alone.");
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     /**

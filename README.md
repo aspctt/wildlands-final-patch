@@ -42,7 +42,8 @@ src/main/java/com/aspctt/wildlandspatch/
 src/main/resources/
     META-INF/neoforge.mods.toml     mod metadata and dependency declarations
     wildlands_patch.mixins.json     mixin config, every mixin class is listed here
-    data_overrides/                 datapack forced above other mods' data, see below
+    data_overrides/                 datapack forced above other mods' data, for broken files
+    data_balance/                   the same, for deliberate balance changes
 external-files/                     local only, never published, see .gitignore
     bug-reports/                    crash reports and logs a fix is being written against
     context-files/                  notes and references for work in progress
@@ -60,6 +61,12 @@ external-files/                     local only, never published, see .gitignore
 
 **Broken JSON in other mods.** Create Deco's placard recipe uses `id` where 1.21.1 requires `item` for an ingredient, a syntax that only became valid in 1.21.2, so the recipe never loads and the placard cannot be crafted. Dungeons and Taverns' quest trader advancement names `minecraft:root` as its parent, which is not an advancement in 1.21, so it never loads and the trade it grants never happens. Both are replaced from a datapack shipped in this JAR, described below.
 
+## What it currently changes on purpose
+
+**Gasoline super heats blaze burners.** Create Crafts & Additions decides a liquid blaze burner's heat level from a `createaddition:liquid_burning` recipe, where `superheated` picks Create's Seething level over Kindled. Create Diesel Generators' gasoline ships as an ordinary fuel, the same as its diesel and crude oil, so this pack overrides that one recipe. Everything else about it, the 24000 tick burn time included, is left as the mod has it, and the other fuels are untouched.
+
+This is not a bug fix, and it ships in a separate datapack from the ones that are, so the two can be switched independently.
+
 ## Adding a fix
 
 1. Declare a toggle in `Config` with `fix(key, comment, default)` and keep the returned key on the class that implements the fix. Write the comment for a player reading the config file: what breaks without it, and which mods are involved.
@@ -68,7 +75,7 @@ external-files/                     local only, never published, see .gitignore
 4. Declare the patched mod in `neoforge.mods.toml` as an `optional` dependency with `ordering="AFTER"`, so this mod loads after the one it corrects.
 5. Add an entry to [CHANGE_LOG.md](./CHANGE_LOG.md) naming the mods involved and the symptom, not the implementation. That entry is what makes the fix findable a year later when the mod updates and the fix has to be re-checked.
 
-When the fix is a broken JSON file rather than behaviour, it needs no code at all. Drop a corrected copy into `src/main/resources/data_overrides/`, at the same path it has in the mod it came from, and change only what is broken. That directory is a datapack registered above every other mod's data, so the copy there wins. Everything in it is someone else's file, so each one has to be re-checked when that mod updates: an override keeps applying long after upstream has fixed the file itself.
+When the fix is a broken JSON file rather than behaviour, it needs no code at all. Drop a corrected copy into `src/main/resources/data_overrides/`, at the same path it has in the mod it came from, and change only what is broken. A change to a file that is not broken, only different from what this pack wants, goes in `src/main/resources/data_balance/` instead. That directory is a datapack registered above every other mod's data, so the copy there wins. Everything in it is someone else's file, so each one has to be re-checked when that mod updates: an override keeps applying long after upstream has fixed the file itself.
 
 ## Development
 
