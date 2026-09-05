@@ -5,7 +5,9 @@
 
 	+ **Fixes**
 		* Serene Seasons no longer crashes a single player world a few seconds after it loads. Its precipitation hook, added in 10.1.0.7, intercepts `Biome.hasPrecipitation` and then falls back to asking the biome that same question, so for any biome not tagged tropical it calls itself until the stack runs out
-		* The fallback reads the biome's own precipitation flag directly instead. NeoForge routes that through the same biome modifiers the hook would have seen, so the answer is unchanged
+		* Re-entry into the hook is answered from the biome's own precipitation flag rather than falling through. NeoForge routes that through the same biome modifiers the hook would have seen, so the answer is unchanged
+		* The guard sits at the method's entry and exit rather than on the fallback call it used to redirect. 10.1.0.9 moved that call into a lambda without fixing the recursion, which left the redirect matching nothing, and a required injection that matches nothing takes the game down. Depending on the method existing rather than on the shape of its body survives that kind of refactor
+		* Still needed as of 10.1.0.9: the client mixin is still there and every biome that is not tagged tropical still falls through to asking the biome the same question
 		* Create Deco's placard recipe loads again. It is written with `id` rather than `item` for an ingredient, which Minecraft only accepts from 1.21.2, so on 1.21.1 the recipe was dropped and the placard could not be crafted
 		* Dungeons and Taverns' quest trader advancement loads again. It named `minecraft:root` as its parent, which is not an advancement in 1.21, so it never loaded and the trade it grants never happened
 		* Its companion `wander_add_map` is deliberately left broken: the reward function it calls, `nova_structures:choose_wander`, is not in the mod at all, so loading the advancement would trade one error at startup for one on every interaction with a wandering trader
