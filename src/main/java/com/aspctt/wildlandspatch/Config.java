@@ -37,6 +37,14 @@ public final class Config {
     // what breaks without the fix, and which mods are involved.
     // ---------------------------------------------------------------------------------------
 
+    public static final String BETTER_END_DOUBLE_ELYTRA = fix("betterEndDoubleElytra", true,
+            "Stops an equipped elytra being drawn twice, once by Minecraft and once by Better End.",
+            "Better End adds its own elytra layer without removing the vanilla one, and its layer draws the",
+            "plain vanilla elytra too. The two overlap and look like one until an animation pack moves one of",
+            "them, and then the second sits behind you in the vanilla pose.",
+            "This removes Better End's layer entirely, which is fine while its own elytras are removed from",
+            "the game. Turn it off if you put those back, or they will render as nothing.");
+
     public static final String SODIUM_OPTIONS_BETTER_BIOME_REBLEND = fix("sodiumOptionsBetterBiomeReblend", true,
             "Puts Better Biome Reblend's blend radius back in Sodium's video settings.",
             "Its own integration targets a class Sodium removed in 0.8, so without this the setting is",

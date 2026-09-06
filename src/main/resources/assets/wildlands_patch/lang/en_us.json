@@ -7,6 +7,7 @@
   "wildlands_patch.configuration.logAppliedFixes": "Log Applied Fixes",
 
   "wildlands_patch.configuration.fixes": "Fixes",
+  "wildlands_patch.configuration.betterEndDoubleElytra": "Better End Double Elytra",
   "wildlands_patch.configuration.balanceTweaks": "Balance Tweaks",
   "wildlands_patch.configuration.brokenDataOverrides": "Broken Data Overrides",
   "wildlands_patch.configuration.duplicateEmptyLootTable": "Duplicate Empty Loot Table Crash",

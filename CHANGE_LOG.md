@@ -4,6 +4,10 @@
 * Unreleased: 1.0.0
 
 	+ **Fixes**
+		* An equipped elytra is drawn once again, not twice. Better End adds its own elytra layer without removing the vanilla one, and its layer draws the plain vanilla elytra as well as its own, so two were rendered on top of each other
+		* Invisible in a normal install, since both sit in the same pose and overlap. Fresh Animations exposes it: Entity Model Features swaps the model behind the vanilla layer for the animated one, so that copy moves with the character while Better End's holds the vanilla pose
+		* Better End's layer is cancelled outright rather than only for vanilla elytras, since the pack removes its armoured elytras from the game. Putting those back means turning this fix off, or they render as nothing
+		* Targeted by class name, so the mod gains no build dependency on Better End
 		* Serene Seasons no longer crashes a single player world a few seconds after it loads. Its precipitation hook, added in 10.1.0.7, intercepts `Biome.hasPrecipitation` and then falls back to asking the biome that same question, so for any biome not tagged tropical it calls itself until the stack runs out
 		* Re-entry into the hook is answered from the biome's own precipitation flag rather than falling through. NeoForge routes that through the same biome modifiers the hook would have seen, so the answer is unchanged
 		* The guard sits at the method's entry and exit rather than on the fallback call it used to redirect. 10.1.0.9 moved that call into a lambda without fixing the recursion, which left the redirect matching nothing, and a required injection that matches nothing takes the game down. Depending on the method existing rather than on the shape of its body survives that kind of refactor

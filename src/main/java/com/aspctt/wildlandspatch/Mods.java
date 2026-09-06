@@ -18,6 +18,8 @@ public final class Mods {
 
     public static final String SERENE_SEASONS = "sereneseasons";
 
+    public static final String BETTER_END = "betterend";
+
     private Mods() {
     }
 
